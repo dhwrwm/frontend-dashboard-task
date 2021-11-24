@@ -1,25 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Box, Container } from "@mui/material";
+import Header from "./components/Header";
+import UserListWrapper from "./components/UserListWrapper";
+import { useDispatch } from "react-redux";
+import { getUsers } from "./redux/actions/users";
 
-function App() {
+function App(): any {
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getUsers());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <Box mt={10}>
+        <Container>
+          <UserListWrapper />
+        </Container>
+      </Box>
+    </>
   );
 }
 
