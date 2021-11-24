@@ -10,26 +10,29 @@ export interface IMainState {
 
 export interface IUserState {
   progressStatus?: ProgressStatus;
+  updatingStatus?: ProgressStatus;
   users: IUser[];
   error?: Error;
+  selectedUserId?: string;
+  remainingUser?: number | undefined;
 }
 
 export interface IUser {
   id: string;
   name: string;
-  username: string;
+  username?: string;
   email: string;
   address?: IAddress;
-  phone: string;
-  website: string;
+  phone?: string;
+  website?: string;
   company?: ICompany;
 }
 
 export interface IAddress {
-  street: string;
-  suite: string;
-  city: string;
-  zipcode: string;
+  street?: string;
+  suite?: string;
+  city?: string;
+  zipcode?: string;
   geo?: IGeo;
 }
 

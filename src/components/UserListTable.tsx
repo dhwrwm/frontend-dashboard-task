@@ -5,13 +5,35 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button } from "@mui/material";
-import { useSelector } from "react-redux";
-import { IMainState, IUser } from "../redux/interfaces";
+import { Box, Button, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { DialogType, IMainState, IUser } from "../redux/interfaces";
+import { openDialog } from "../redux/actions/dialog";
+import { setUserIdInRedux } from "../redux/actions/users";
 
 const UserListTable = () => {
-  const users = useSelector((state: IMainState) => state?.userState?.users);
+  const dispatch = useDispatch();
+  const userState = useSelector((state: IMainState) => state?.userState);
+  const users = userState?.users;
+  const allUsersDeleted = userState?.remainingUser === 0;
 
+  const onEdit = (userId: string) => {
+    dispatch(setUserIdInRedux(userId));
+    dispatch(openDialog(DialogType.EDIT_USER));
+  };
+
+  const onDelete = (userId: string) => {
+    dispatch(setUserIdInRedux(userId));
+    dispatch(openDialog(DialogType.DELETE_USER_CONFIRM));
+  };
+
+  if (allUsersDeleted) {
+    return (
+      <Box textAlign="center">
+        <Typography>All users are deleted</Typography>
+      </Box>
+    );
+  }
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -48,12 +70,20 @@ const UserListTable = () => {
                 {user?.address?.city}
               </TableCell>
               <TableCell component="th" scope="row" align="center">
-                <Button variant="contained" color="warning">
+                <Button
+                  variant="contained"
+                  color="warning"
+                  onClick={() => onEdit(user.id)}
+                >
                   Edit
                 </Button>
               </TableCell>
               <TableCell component="th" scope="row" align="center">
-                <Button variant="contained" color="error">
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => onDelete(user.id)}
+                >
                   Delete
                 </Button>
               </TableCell>

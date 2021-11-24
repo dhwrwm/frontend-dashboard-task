@@ -37,7 +37,7 @@ function App(): any {
         open={!!dialogState?.open}
         handleClose={handleClose}
         title={getDialogTitle(dialogState?.dialogType)}
-        children={getDialogChildren(dialogState?.dialogType)}
+        children={getDialogChildren(dialogState?.dialogType, handleClose)}
       />
     </>
   );

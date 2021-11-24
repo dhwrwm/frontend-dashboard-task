@@ -3,6 +3,8 @@ import { DialogType, ProgressStatus } from "../redux/interfaces";
 import CircularProgress from "@mui/material/CircularProgress";
 import { SxProps } from "@mui/system";
 import UserListTable from "./UserListTable";
+import AddUserForm from "./AddUserForm";
+import DeleteConfirm from "./DeleteConfirm";
 
 const boxStyle: SxProps = {
   display: "flex",
@@ -27,16 +29,19 @@ export const getDialogTitle = (type?: DialogType) => {
   }
 };
 
-export const getDialogChildren = (type?: DialogType) => {
+export const getDialogChildren = (
+  type?: DialogType,
+  handleClose?: () => void
+) => {
   switch (type) {
     case DialogType.ADD_USER:
-      return "Add user";
+      return <AddUserForm handleClose={handleClose} />;
 
     case DialogType.EDIT_USER:
-      return "Edit user";
+      return <AddUserForm handleClose={handleClose} />;
 
     case DialogType.DELETE_USER_CONFIRM:
-      return "Delete User";
+      return <DeleteConfirm handleClose={handleClose} />;
 
     default:
       return "";
