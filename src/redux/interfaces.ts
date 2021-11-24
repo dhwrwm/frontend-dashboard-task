@@ -5,6 +5,7 @@ export enum ProgressStatus {
 }
 export interface IMainState {
   userState: IUserState;
+  dialogState?: IDialogState;
 }
 
 export interface IUserState {
@@ -41,4 +42,15 @@ export interface ICompany {
   name: string;
   catchPhrase?: string;
   bs?: string;
+}
+
+export interface IDialogState {
+  open?: boolean;
+  dialogType?: DialogType;
+}
+
+export enum DialogType {
+  ADD_USER = "ADD_USER",
+  EDIT_USER = "EDIT_USER",
+  DELETE_USER_CONFIRM = "DELETE_USER_CONFIRM",
 }

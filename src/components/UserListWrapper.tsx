@@ -1,48 +1,21 @@
 import React from "react";
-import { Box, Button, Typography, Alert } from "@mui/material";
-import { useSelector } from "react-redux";
-import { IMainState, ProgressStatus } from "../redux/interfaces";
-import UserListTable from "./UserListTable";
-import CircularProgress from "@mui/material/CircularProgress";
-import { SxProps } from "@mui/system";
-
-const boxStyle: SxProps = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  minHeight: 300,
-};
+import { Box, Button, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { DialogType, IMainState } from "../redux/interfaces";
+import { getUserListWrapperComponent } from "./componentFactory";
+import { openDialog } from "../redux/actions/dialog";
 
 const UserListWrapper = () => {
+  const dispatch = useDispatch();
   const userState = useSelector((state: IMainState) => state?.userState);
   const progressStatus = userState?.progressStatus;
 
-  let component: React.ReactNode = null;
-
-  switch (progressStatus) {
-    case ProgressStatus.LOADING: {
-      component = (
-        <Box sx={boxStyle}>
-          <CircularProgress />
-        </Box>
-      );
-      break;
-    }
-
-    case ProgressStatus.SUCCESSFUL: {
-      component = <UserListTable />;
-      break;
-    }
-
-    case ProgressStatus.FAILED: {
-      component = (
-        <Box sx={boxStyle}>
-          <Alert severity="error">Failed to fetch users.</Alert>
-        </Box>
-      );
-      break;
-    }
-  }
+  const onAddUser = React.useCallback(
+    (e: any) => {
+      dispatch(openDialog(DialogType.ADD_USER));
+    },
+    [dispatch]
+  );
 
   return (
     <Box
@@ -61,9 +34,11 @@ const UserListWrapper = () => {
         }}
       >
         <Typography>User List</Typography>
-        <Button variant="contained">Add New</Button>
+        <Button variant="contained" onClick={onAddUser}>
+          Add New
+        </Button>
       </Box>
-      {component}
+      {getUserListWrapperComponent(progressStatus)}
     </Box>
   );
 };

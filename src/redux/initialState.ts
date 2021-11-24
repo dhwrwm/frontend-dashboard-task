@@ -4,4 +4,8 @@ export const defaultState: IMainState = {
   userState: {
     users: [],
   },
+  dialogState: {
+    open: false,
+    dialogType: undefined,
+  },
 };

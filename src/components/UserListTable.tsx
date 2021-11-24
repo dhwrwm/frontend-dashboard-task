@@ -1,4 +1,3 @@
-import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,8 +11,6 @@ import { IMainState, IUser } from "../redux/interfaces";
 
 const UserListTable = () => {
   const users = useSelector((state: IMainState) => state?.userState?.users);
-
-  console.log("users is", users);
 
   return (
     <TableContainer component={Paper}>
