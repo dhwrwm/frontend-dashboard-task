@@ -1,3 +1,4 @@
+import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,9 +11,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { DialogType, IMainState, IUser } from "../redux/interfaces";
 import { openDialog } from "../redux/actions/dialog";
 import { setUserIdInRedux } from "../redux/actions/users";
+import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
+import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
+import { orderBy } from "lodash";
+
+enum SortType {
+  ASCENDING = "asc",
+  DESCENDING = "desc",
+}
 
 const UserListTable = () => {
   const dispatch = useDispatch();
+  const [sort, setSort] = React.useState<SortType>();
+  const isAscSortByUsername = sort === SortType.ASCENDING;
   const userState = useSelector((state: IMainState) => state?.userState);
   const users = userState?.users;
   const allUsersDeleted = userState?.remainingUser === 0;
@@ -26,6 +37,10 @@ const UserListTable = () => {
     dispatch(setUserIdInRedux(userId));
     dispatch(openDialog(DialogType.DELETE_USER_CONFIRM));
   };
+
+  const sortedUsers = sort
+    ? orderBy(users, [(user) => user?.username?.toLowerCase()], [sort])
+    : users;
 
   if (allUsersDeleted) {
     return (
@@ -41,7 +56,22 @@ const UserListTable = () => {
           <TableRow>
             <TableCell>id</TableCell>
             <TableCell>Name</TableCell>
-            <TableCell>UserName</TableCell>
+            <TableCell
+              title="Sort"
+              onClick={() =>
+                setSort(
+                  isAscSortByUsername ? SortType.DESCENDING : SortType.ASCENDING
+                )
+              }
+              sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+            >
+              UserName
+              {isAscSortByUsername ? (
+                <KeyboardArrowDownOutlinedIcon fontSize="small" />
+              ) : (
+                <KeyboardArrowUpOutlinedIcon fontSize="small" />
+              )}
+            </TableCell>
             <TableCell>Email</TableCell>
             <TableCell>City</TableCell>
             <TableCell align="center">Edit</TableCell>
@@ -49,7 +79,7 @@ const UserListTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users?.map((user: IUser, index) => (
+          {sortedUsers?.map((user: IUser, index) => (
             <TableRow
               key={index}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
